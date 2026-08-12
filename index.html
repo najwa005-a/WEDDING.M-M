@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
 
 <meta charset="UTF-8">
@@ -12,10 +13,11 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Great+Vibes&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
 
+
 <style>
 
 /* =========================================================
-   GLOBAL
+   RESET
 ========================================================= */
 
 *{
@@ -29,249 +31,620 @@ html{
 }
 
 body{
+    margin:0;
     background:#f6efe5;
     color:#3b2925;
     overflow-x:hidden;
 }
 
+button,
 a{
-    text-decoration:none;
+    font:inherit;
 }
 
 
 /* =========================================================
-   OPENING
+   ENVELOPE SCREEN
 ========================================================= */
 
-.opening{
+.envelope-screen{
+
     position:fixed;
+
     inset:0;
+
     width:100%;
     height:100dvh;
 
+    z-index:99999;
+
     display:flex;
+
     align-items:center;
     justify-content:center;
 
-    background:#f7f1e8;
+    overflow:hidden;
 
-    z-index:9999;
+    background:#eadbc8;
 
     transition:
-        opacity 1.4s ease,
-        visibility 1.4s ease,
-        transform 1.4s cubic-bezier(.77,0,.18,1);
+        opacity 1s ease,
+        visibility 1s ease;
 }
 
-.opening.hidden{
+.envelope-screen.hide{
+
     opacity:0;
+
     visibility:hidden;
-    transform:scale(1.05);
+
     pointer-events:none;
 }
 
-.opening::before{
+
+/* papier texture */
+
+.envelope-screen::before{
+
     content:"";
+
     position:absolute;
+
     inset:0;
 
     background-image:
         radial-gradient(
-            rgba(90,65,50,.05) 1px,
+            rgba(90,65,50,.06) 1px,
             transparent 1px
         );
 
     background-size:7px 7px;
-    opacity:.25;
-}
 
-.opening-frame{
-    position:absolute;
-    inset:24px;
-
-    border:1px solid rgba(105,72,58,.22);
+    opacity:.4;
 
     pointer-events:none;
 }
 
-.opening-frame::before,
-.opening-frame::after{
-    content:"";
+
+/* border */
+
+.envelope-border{
+
     position:absolute;
 
-    width:65px;
-    height:65px;
-}
+    inset:18px;
 
-.opening-frame::before{
-    top:-1px;
-    left:-1px;
+    border:1px solid rgba(103,76,59,.25);
 
-    border-top:2px solid #7a1f2a;
-    border-left:2px solid #7a1f2a;
-}
+    z-index:50;
 
-.opening-frame::after{
-    bottom:-1px;
-    right:-1px;
-
-    border-bottom:2px solid #7a1f2a;
-    border-right:2px solid #7a1f2a;
-}
-
-.opening-content{
-    position:relative;
-    z-index:2;
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-
-    text-align:center;
-}
-
-.opening-initials{
-    font-family:"Cormorant Garamond",serif;
-
-    font-size:17px;
-    letter-spacing:7px;
-
-    color:#7a1f2a;
-
-    margin-bottom:25px;
+    pointer-events:none;
 }
 
 
 /* =========================================================
-   WAX SEAL
+   ENVELOPE
 ========================================================= */
 
-.wax-wrapper{
+.envelope{
+
     position:relative;
 
-    width:145px;
-    height:145px;
+    width:100%;
+    height:100%;
+
+    overflow:hidden;
+
+    cursor:pointer;
+
+    perspective:1800px;
+}
+
+
+/* =========================================================
+   INNER INVITATION
+========================================================= */
+
+.inside-card{
+
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    width:min(460px,76vw);
+    height:min(570px,70vh);
+
+    transform:
+        translate(-50%,-50%)
+        scale(.78);
+
+    background:#fffaf2;
+
+    border:1px solid rgba(122,31,42,.18);
+
+    box-shadow:
+        0 25px 70px rgba(60,35,25,.25);
+
+    z-index:3;
 
     display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    opacity:0;
+
+    transition:
+
+        opacity 1.2s ease .45s,
+
+        transform 1.5s
+        cubic-bezier(.22,1,.36,1)
+        .45s;
+}
+
+
+.inside-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:13px;
+
+    border:1px solid rgba(122,31,42,.15);
+}
+
+
+.inside-content{
+
+    position:relative;
+
+    z-index:2;
+
+    padding:30px;
+}
+
+
+.inside-small{
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:13px;
+
+    letter-spacing:4px;
+
+    text-transform:uppercase;
+
+    color:#8c7467;
+
+    margin-bottom:20px;
+}
+
+
+.inside-names{
+
+    font-family:"Great Vibes",cursive;
+
+    font-size:65px;
+
+    line-height:.95;
+
+    color:#741e29;
+}
+
+
+.inside-and{
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:20px;
+
+    margin:12px 0;
+
+    color:#8b6d5d;
+}
+
+
+.inside-date{
+
+    font-family:"Playfair Display",serif;
+
+    font-size:14px;
+
+    letter-spacing:3px;
+
+    color:#654e44;
+
+    margin-top:28px;
+}
+
+
+/* =========================================================
+   4 FLAPS
+========================================================= */
+
+.flap{
+
+    position:absolute;
+
+    z-index:10;
+
+    background:
+        linear-gradient(
+            145deg,
+            #f4e6d4,
+            #dfc8ad
+        );
+
+    transition:
+        transform 1.45s
+        cubic-bezier(.77,0,.18,1);
+
+    box-shadow:
+        0 5px 20px rgba(70,45,30,.10);
+
+    backface-visibility:hidden;
+
+    pointer-events:none;
+}
+
+
+/* TOP */
+
+.flap-top{
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:51%;
+
+    clip-path:
+        polygon(
+            0 0,
+            100% 0,
+            50% 100%
+        );
+
+    transform-origin:50% 0;
+
+    z-index:20;
+}
+
+
+/* BOTTOM */
+
+.flap-bottom{
+
+    bottom:0;
+    left:0;
+
+    width:100%;
+    height:51%;
+
+    clip-path:
+        polygon(
+            0 100%,
+            100% 100%,
+            50% 0
+        );
+
+    transform-origin:50% 100%;
+
+    z-index:19;
+}
+
+
+/* LEFT */
+
+.flap-left{
+
+    left:0;
+    top:0;
+
+    width:51%;
+    height:100%;
+
+    clip-path:
+        polygon(
+            0 0,
+            0 100%,
+            100% 50%
+        );
+
+    transform-origin:0 50%;
+
+    z-index:18;
+}
+
+
+/* RIGHT */
+
+.flap-right{
+
+    right:0;
+    top:0;
+
+    width:51%;
+    height:100%;
+
+    clip-path:
+        polygon(
+            100% 0,
+            100% 100%,
+            0 50%
+        );
+
+    transform-origin:100% 50%;
+
+    z-index:17;
+}
+
+
+/* =========================================================
+   OPENED FLAPS
+========================================================= */
+
+.envelope.opened .flap-top{
+
+    transform:
+        translateY(-105%)
+        rotateX(-18deg);
+}
+
+
+.envelope.opened .flap-bottom{
+
+    transform:
+        translateY(105%)
+        rotateX(18deg);
+}
+
+
+.envelope.opened .flap-left{
+
+    transform:
+        translateX(-105%)
+        rotateY(18deg);
+}
+
+
+.envelope.opened .flap-right{
+
+    transform:
+        translateX(105%)
+        rotateY(-18deg);
+}
+
+
+/* invitation appears */
+
+.envelope.opened .inside-card{
+
+    opacity:1;
+
+    transform:
+        translate(-50%,-50%)
+        scale(1);
+}
+
+
+/* =========================================================
+   CENTER WAX SEAL
+========================================================= */
+
+.wax-button{
+
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    width:126px;
+    height:126px;
+
+    border-radius:50%;
+
+    border:0;
+
+    z-index:100;
+
+    display:flex;
+
+    flex-direction:column;
+
     align-items:center;
     justify-content:center;
 
     cursor:pointer;
 
-    animation:sealFloat 4s ease-in-out infinite;
-}
-
-.wax-wrapper::before{
-    content:"";
-
-    position:absolute;
-
-    width:170px;
-    height:170px;
-
-    border:1px solid rgba(122,31,42,.18);
-
-    border-radius:50%;
-
-    animation:ringPulse 3s ease-in-out infinite;
-}
-
-.wax-seal{
-    width:122px;
-    height:122px;
-
-    border-radius:50%;
-
-    position:relative;
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-
-    color:#f7eadb;
+    color:#f9eadd;
 
     background:
         radial-gradient(
-            circle at 35% 30%,
-            #9e4652 0%,
-            #7b202c 35%,
-            #64151f 70%,
-            #4d1018 100%
+            circle at 32% 28%,
+            #aa515c 0%,
+            #822531 35%,
+            #681620 68%,
+            #4b0d15 100%
         );
 
     box-shadow:
-        0 12px 25px rgba(78,27,31,.25),
-        inset 7px 7px 12px rgba(255,255,255,.08),
-        inset -8px -10px 15px rgba(25,0,5,.25);
 
-    transition:.45s ease;
+        0 15px 35px
+        rgba(65,20,25,.35),
+
+        inset 7px 7px 13px
+        rgba(255,255,255,.08),
+
+        inset -9px -11px 16px
+        rgba(30,0,5,.30);
+
+    transition:
+
+        transform .4s ease,
+
+        opacity .6s ease;
 }
 
-.wax-wrapper:hover .wax-seal{
-    transform:scale(1.07) rotate(-2deg);
-}
 
-.wax-seal::before{
+.wax-button::before{
+
     content:"";
 
     position:absolute;
-    inset:-4px;
 
-    border-radius:
-        47% 53% 50% 48%
-        /
-        51% 47% 53% 49%;
+    inset:-5px;
 
-    border:2px solid rgba(103,17,27,.5);
+    border-radius:50%;
+
+    border:2px solid rgba(100,17,27,.5);
 }
 
-.wax-mn{
+
+.wax-button:hover{
+
+    transform:
+        translate(-50%,-50%)
+        scale(1.06)
+        rotate(-2deg);
+}
+
+
+.wax-initials{
+
     font-family:"Great Vibes",cursive;
 
-    font-size:44px;
+    font-size:45px;
+
     line-height:1;
+
+    position:relative;
+
+    z-index:2;
 }
+
 
 .wax-line{
-    width:35px;
+
+    width:34px;
+
     height:1px;
 
-    background:rgba(247,234,219,.55);
+    background:rgba(255,240,225,.65);
 
     margin:6px 0 4px;
+
+    position:relative;
+
+    z-index:2;
 }
 
-.wax-text{
+
+.wax-word{
+
     font-family:"Cormorant Garamond",serif;
 
-    font-size:9px;
+    font-size:8px;
+
     letter-spacing:3px;
+
     text-transform:uppercase;
+
+    position:relative;
+
+    z-index:2;
 }
 
-.open-text{
-    margin-top:31px;
+
+/* seal disappears */
+
+.envelope.opened .wax-button{
+
+    opacity:0;
+
+    transform:
+        translate(-50%,-50%)
+        scale(.45);
+
+    pointer-events:none;
+}
+
+
+/* =========================================================
+   OPEN TEXT
+========================================================= */
+
+.open-message{
+
+    position:absolute;
+
+    left:50%;
+
+    bottom:7%;
+
+    transform:translateX(-50%);
+
+    z-index:200;
+
+    text-align:center;
+
+    color:#705b4f;
+
+    transition:
+        opacity .5s ease;
+}
+
+
+.open-title{
 
     font-family:"Cormorant Garamond",serif;
 
-    font-size:13px;
+    font-size:14px;
+
     letter-spacing:4px;
+
     text-transform:uppercase;
 
-    color:#765f52;
-
-    animation:fadeText 2s ease-in-out infinite alternate;
+    animation:pulse 2s infinite alternate;
 }
 
-.open-subtext{
-    margin-top:7px;
+
+.open-subtitle{
 
     font-family:"Cormorant Garamond",serif;
 
     font-size:13px;
 
-    color:#9b887c;
+    color:#988276;
+
+    margin-top:7px;
+}
+
+
+.envelope.opened .open-message{
+
+    opacity:0;
+}
+
+
+@keyframes pulse{
+
+    from{
+        opacity:.45;
+    }
+
+    to{
+        opacity:1;
+    }
+
 }
 
 
@@ -280,31 +653,39 @@ a{
 ========================================================= */
 
 .main{
+
     opacity:0;
+
     visibility:hidden;
 
     transition:
-        opacity 1.4s ease .3s,
-        visibility 1.4s ease .3s;
+
+        opacity 1.2s ease;
 }
 
+
 .main.visible{
+
     opacity:1;
+
     visibility:visible;
 }
 
 
 /* =========================================================
-   PARTIE 1 — HERO
+   HERO
 ========================================================= */
 
 .hero{
-    min-height:100svh;
 
     position:relative;
 
+    min-height:100svh;
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     overflow:hidden;
@@ -312,7 +693,9 @@ a{
     background:#4b4039;
 }
 
+
 .hero-image{
+
     position:absolute;
 
     inset:0;
@@ -322,60 +705,53 @@ a{
 
     object-fit:cover;
 
-    object-position:center center;
+    object-position:center;
 
     z-index:0;
 }
 
+
 .hero::before{
+
     content:"";
 
     position:absolute;
+
     inset:0;
 
     background:
+
         linear-gradient(
-            rgba(15,20,20,.10),
-            rgba(15,20,20,.38)
+            rgba(10,10,10,.10),
+            rgba(10,10,10,.42)
         );
 
     z-index:1;
 }
 
-.hero::after{
-    content:"";
-
-    position:absolute;
-    inset:0;
-
-    background:
-        linear-gradient(
-            to bottom,
-            rgba(15,20,20,.05),
-            rgba(15,20,20,.12) 45%,
-            rgba(15,20,20,.48)
-        );
-
-    z-index:1;
-}
 
 .hero-content{
+
     position:relative;
+
     z-index:2;
 
     width:min(950px,92%);
 
-    padding:40px 20px;
-
     text-align:center;
 
     color:#fffdf8;
+
+    padding:40px 20px;
 }
 
+
 .eyebrow{
+
     font-family:"Cormorant Garamond",serif;
 
     font-size:14px;
+
     letter-spacing:6px;
 
     text-transform:uppercase;
@@ -383,39 +759,42 @@ a{
     margin-bottom:18px;
 }
 
+
 .bismillah{
+
     font-family:"Amiri",serif;
 
     font-size:32px;
 
-    line-height:1.8;
-
     margin-bottom:15px;
-
-    text-shadow:0 3px 15px rgba(0,0,0,.28);
 }
 
+
 .names{
+
     font-family:"Great Vibes",cursive;
 
-    font-size:clamp(68px,11vw,125px);
+    font-size:clamp(70px,11vw,125px);
 
     line-height:.95;
 
-    text-shadow:0 5px 25px rgba(0,0,0,.30);
+    text-shadow:
+        0 5px 25px rgba(0,0,0,.3);
 }
 
+
 .names .and{
+
     font-family:"Cormorant Garamond",serif;
 
     font-size:.35em;
 
     margin:0 12px;
-
-    vertical-align:middle;
 }
 
+
 .hero-mn{
+
     font-family:"Cormorant Garamond",serif;
 
     font-size:13px;
@@ -425,16 +804,21 @@ a{
     margin-top:25px;
 }
 
-.hero-separator{
+
+.hero-line{
+
     width:100px;
+
     height:1px;
 
-    background:rgba(255,255,255,.65);
+    background:rgba(255,255,255,.7);
 
     margin:28px auto;
 }
 
+
 .date{
+
     font-family:"Playfair Display",serif;
 
     font-size:18px;
@@ -444,25 +828,28 @@ a{
     margin-bottom:8px;
 }
 
+
 .location-small{
+
     font-family:"Cormorant Garamond",serif;
 
     font-size:17px;
 
     letter-spacing:2px;
-
-    opacity:.94;
 }
 
+
 .scroll-down{
+
     position:absolute;
 
-    z-index:3;
-
     left:50%;
-    bottom:24px;
+
+    bottom:25px;
 
     transform:translateX(-50%);
+
+    z-index:3;
 
     color:white;
 
@@ -475,11 +862,14 @@ a{
     text-transform:uppercase;
 }
 
+
 .scroll-line{
+
     width:1px;
+
     height:35px;
 
-    background:rgba(255,255,255,.7);
+    background:white;
 
     margin:9px auto 0;
 
@@ -487,71 +877,59 @@ a{
 }
 
 
+@keyframes scrollLine{
+
+    0%,100%{
+
+        transform:scaleY(.3);
+
+        opacity:.2;
+
+        transform-origin:top;
+    }
+
+    50%{
+
+        transform:scaleY(1);
+
+        opacity:1;
+
+        transform-origin:top;
+    }
+
+}
+
+
 /* =========================================================
-   PARTIE 2 — DETAILS
+   DETAILS
 ========================================================= */
 
 .details{
+
     min-height:100svh;
 
-    position:relative;
-
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     padding:100px 20px;
 
     background:#f6efe5;
 
-    overflow:hidden;
-}
-
-.details::before{
-    content:"";
-
-    position:absolute;
-
-    width:450px;
-    height:450px;
-
-    border-radius:50%;
-
-    border:1px solid rgba(122,31,42,.08);
-
-    top:-250px;
-    left:-250px;
-}
-
-.details::after{
-    content:"";
-
-    position:absolute;
-
-    width:380px;
-    height:380px;
-
-    border-radius:50%;
-
-    border:1px solid rgba(122,31,42,.08);
-
-    bottom:-210px;
-    right:-210px;
-}
-
-.details-container{
-    position:relative;
-
-    z-index:2;
-
-    width:min(1050px,100%);
-
-    margin:auto;
-
     text-align:center;
 }
 
+
+.details-container{
+
+    width:min(1050px,100%);
+}
+
+
 .details-intro{
+
     font-family:"Cormorant Garamond",serif;
 
     font-size:14px;
@@ -565,7 +943,9 @@ a{
     margin-bottom:18px;
 }
 
+
 .details-title{
+
     font-family:"Great Vibes",cursive;
 
     font-size:65px;
@@ -575,8 +955,11 @@ a{
     margin-bottom:18px;
 }
 
+
 .details-line{
+
     width:70px;
+
     height:1px;
 
     background:#8d6b59;
@@ -584,41 +967,34 @@ a{
     margin:0 auto 45px;
 }
 
+
 .info-grid{
+
     display:grid;
 
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:
+        repeat(3,1fr);
 
     gap:30px;
 
     margin-bottom:50px;
 }
 
+
 .info-card{
-    position:relative;
 
     padding:35px 20px;
 
-    background:rgba(255,255,255,.38);
+    background:
+        rgba(255,255,255,.42);
 
-    border:1px solid rgba(104,75,61,.18);
+    border:
+        1px solid
+        rgba(104,75,61,.18);
 }
 
-.info-card::before{
-    content:"";
-
-    position:absolute;
-
-    top:8px;
-    left:8px;
-    right:8px;
-    bottom:8px;
-
-    border:1px solid rgba(122,31,42,.08);
-}
 
 .info-icon{
-    position:relative;
 
     color:#7a1f2a;
 
@@ -627,8 +1003,8 @@ a{
     margin-bottom:13px;
 }
 
+
 .info-label{
-    position:relative;
 
     font-family:"Cormorant Garamond",serif;
 
@@ -643,8 +1019,8 @@ a{
     margin-bottom:10px;
 }
 
+
 .info-value{
-    position:relative;
 
     font-family:"Playfair Display",serif;
 
@@ -656,15 +1032,8 @@ a{
 }
 
 
-/* =========================================================
-   LOCALISATION
-========================================================= */
-
-.location-section{
-    padding-top:10px;
-}
-
 .location-title{
+
     font-family:"Great Vibes",cursive;
 
     font-size:50px;
@@ -674,7 +1043,9 @@ a{
     margin-bottom:10px;
 }
 
+
 .location-address{
+
     font-family:"Cormorant Garamond",serif;
 
     font-size:19px;
@@ -684,10 +1055,13 @@ a{
     margin-bottom:25px;
 }
 
+
 .map-button{
+
     display:inline-flex;
 
     align-items:center;
+
     justify-content:center;
 
     gap:10px;
@@ -698,8 +1072,6 @@ a{
 
     color:#741e29;
 
-    background:transparent;
-
     font-family:"Cormorant Garamond",serif;
 
     font-size:15px;
@@ -708,23 +1080,24 @@ a{
 
     text-transform:uppercase;
 
-    transition:.35s ease;
+    transition:.3s ease;
 }
 
+
 .map-button:hover{
+
     background:#741e29;
 
-    color:#fff8ef;
-
-    transform:translateY(-3px);
+    color:white;
 }
 
 
 /* =========================================================
-   PARTIE 3 — TABLE / SOIRÉE ÉLÉGANTE
+   TABLE SECTION
 ========================================================= */
 
 .table-section{
+
     min-height:100svh;
 
     position:relative;
@@ -732,16 +1105,19 @@ a{
     display:flex;
 
     align-items:center;
+
     justify-content:center;
 
     overflow:hidden;
 
     padding:80px 20px;
 
-    background:#4b4039;
+    background:#40362f;
 }
 
+
 .table-image{
+
     position:absolute;
 
     inset:0;
@@ -751,31 +1127,14 @@ a{
 
     object-fit:cover;
 
-    object-position:center center;
+    object-position:center;
 
     z-index:0;
-
-    transform:scale(1.01);
 }
 
-.table-section::before{
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    background:
-        linear-gradient(
-            to bottom,
-            rgba(20,18,15,.18),
-            rgba(20,18,15,.35)
-        );
-
-    z-index:1;
-}
 
 .table-section::after{
+
     content:"";
 
     position:absolute;
@@ -783,16 +1142,18 @@ a{
     inset:0;
 
     background:
-        radial-gradient(
-            circle at center,
-            transparent 20%,
-            rgba(15,20,18,.28) 100%
+
+        linear-gradient(
+            rgba(20,18,15,.15),
+            rgba(20,18,15,.45)
         );
 
     z-index:1;
 }
 
+
 .table-content{
+
     position:relative;
 
     z-index:2;
@@ -805,14 +1166,17 @@ a{
 
     padding:45px 30px;
 
-    background:rgba(35,28,23,.16);
+    border:
+        1px solid
+        rgba(255,255,255,.25);
 
-    backdrop-filter:blur(2px);
-
-    border:1px solid rgba(255,255,255,.25);
+    background:
+        rgba(30,25,20,.12);
 }
 
+
 .table-small{
+
     font-family:"Cormorant Garamond",serif;
 
     font-size:14px;
@@ -824,52 +1188,53 @@ a{
     margin-bottom:18px;
 }
 
+
 .table-title{
+
     font-family:"Great Vibes",cursive;
 
     font-size:78px;
 
     line-height:1.05;
 
-    margin-bottom:25px;
-
-    text-shadow:0 4px 20px rgba(0,0,0,.28);
+    margin-bottom:22px;
 }
 
+
 .table-decoration{
+
     width:65px;
+
     height:1px;
 
-    background:rgba(255,255,255,.75);
+    background:rgba(255,255,255,.8);
 
     margin:0 auto 25px;
 }
 
+
 .table-text{
+
     font-family:"Cormorant Garamond",serif;
 
     font-size:21px;
 
     line-height:1.7;
-
-    max-width:620px;
-
-    margin:auto;
-
-    text-shadow:0 2px 15px rgba(0,0,0,.35);
 }
 
 
 /* =========================================================
-   PARTIE 4 — FINAL
+   FINAL
 ========================================================= */
 
 .final{
+
     min-height:75svh;
 
     display:flex;
 
     align-items:center;
+
     justify-content:center;
 
     text-align:center;
@@ -879,11 +1244,15 @@ a{
     background:#f6efe5;
 }
 
+
 .final-content{
+
     width:min(750px,92%);
 }
 
+
 .final-mn{
+
     font-family:"Cormorant Garamond",serif;
 
     font-size:14px;
@@ -895,7 +1264,9 @@ a{
     margin-bottom:20px;
 }
 
+
 .final-title{
+
     font-family:"Great Vibes",cursive;
 
     font-size:80px;
@@ -905,7 +1276,9 @@ a{
     margin-bottom:20px;
 }
 
+
 .final-text{
+
     font-family:"Cormorant Garamond",serif;
 
     font-size:21px;
@@ -915,7 +1288,9 @@ a{
     color:#665249;
 }
 
+
 .final-date{
+
     font-family:"Playfair Display",serif;
 
     font-size:16px;
@@ -929,27 +1304,31 @@ a{
 
 
 /* =========================================================
-   WEDDING INVITATION STUDIO
+   STUDIO
 ========================================================= */
 
 .studio-footer{
+
     margin-top:65px;
 
     text-align:center;
 }
 
+
 .studio-line{
+
     width:55px;
+
     height:1px;
 
     background:#7a1f2a;
 
     margin:0 auto 25px;
-
-    opacity:.7;
 }
 
+
 .studio-name{
+
     font-family:"Playfair Display",serif;
 
     font-size:15px;
@@ -963,7 +1342,9 @@ a{
     margin-bottom:10px;
 }
 
+
 .studio-tagline{
+
     font-family:"Cormorant Garamond",serif;
 
     font-size:16px;
@@ -973,7 +1354,9 @@ a{
     margin-bottom:20px;
 }
 
+
 .instagram-link{
+
     display:inline-flex;
 
     flex-direction:column;
@@ -990,86 +1373,21 @@ a{
 
     letter-spacing:1.5px;
 
-    border-bottom:1px solid rgba(122,31,42,.35);
+    border-bottom:
+        1px solid
+        rgba(122,31,42,.35);
 
     padding-bottom:5px;
-
-    transition:.3s ease;
 }
 
+
 .instagram-link span{
+
     font-size:11px;
 
     letter-spacing:3px;
 
     text-transform:uppercase;
-}
-
-.instagram-link:hover{
-    transform:translateY(-2px);
-
-    opacity:.75;
-}
-
-
-/* =========================================================
-   ANIMATIONS
-========================================================= */
-
-@keyframes sealFloat{
-
-    0%,100%{
-        transform:translateY(0);
-    }
-
-    50%{
-        transform:translateY(-7px);
-    }
-}
-
-@keyframes ringPulse{
-
-    0%,100%{
-        transform:scale(1);
-        opacity:.5;
-    }
-
-    50%{
-        transform:scale(1.08);
-        opacity:.15;
-    }
-}
-
-@keyframes fadeText{
-
-    from{
-        opacity:.45;
-    }
-
-    to{
-        opacity:1;
-    }
-}
-
-@keyframes scrollLine{
-
-    0%{
-        transform:scaleY(.3);
-        transform-origin:top;
-        opacity:.2;
-    }
-
-    50%{
-        transform:scaleY(1);
-        transform-origin:top;
-        opacity:1;
-    }
-
-    100%{
-        transform:scaleY(.3);
-        transform-origin:bottom;
-        opacity:.2;
-    }
 }
 
 
@@ -1079,255 +1397,274 @@ a{
 
 @media(max-width:700px){
 
-    .opening-frame{
-        inset:15px;
+    .envelope-border{
+        inset:10px;
     }
 
-    .opening-initials{
-        font-size:14px;
-        letter-spacing:5px;
+
+    .inside-card{
+
+        width:72vw;
+
+        height:54vh;
+
     }
 
-    .wax-wrapper{
-        width:130px;
-        height:130px;
+
+    .inside-names{
+
+        font-size:52px;
+
     }
 
-    .wax-wrapper::before{
-        width:152px;
-        height:152px;
+
+    .wax-button{
+
+        width:104px;
+
+        height:104px;
+
     }
 
-    .wax-seal{
-        width:108px;
-        height:108px;
+
+    .wax-initials{
+
+        font-size:37px;
+
     }
 
-    .wax-mn{
-        font-size:39px;
+
+    .open-message{
+
+        bottom:6%;
+
+        width:90%;
+
     }
 
-    .open-text{
+
+    .open-title{
+
         font-size:11px;
+
         letter-spacing:3px;
+
     }
 
 
-    /* HERO */
+    .open-subtitle{
 
-    .hero{
-        min-height:100svh;
+        font-size:12px;
+
     }
 
-    .hero-image{
-        object-position:center center;
-    }
 
     .bismillah{
-        font-size:26px;
+
+        font-size:25px;
+
     }
+
 
     .names{
-        font-size:70px;
+
+        font-size:68px;
+
     }
+
 
     .names .and{
-        font-size:.32em;
-        margin:0 4px;
+
+        margin:0 5px;
+
     }
+
 
     .hero-mn{
+
         font-size:11px;
-        letter-spacing:6px;
+
     }
+
 
     .date{
+
         font-size:15px;
-        letter-spacing:2px;
+
     }
+
 
     .location-small{
+
         font-size:15px;
+
     }
 
-
-    /* DETAILS */
 
     .details{
-        min-height:100svh;
 
         padding:85px 18px;
+
     }
+
 
     .details-title{
+
         font-size:55px;
+
     }
 
+
     .info-grid{
+
         grid-template-columns:1fr;
 
         gap:15px;
+
     }
+
 
     .info-card{
+
         padding:28px 18px;
+
     }
+
 
     .location-title{
+
         font-size:45px;
+
     }
 
 
-    /* TABLE */
-
     .table-section{
+
         min-height:90svh;
 
         padding:60px 15px;
+
     }
 
-    .table-image{
-        object-position:center center;
-    }
 
     .table-content{
+
         width:94%;
 
-        padding:35px 20px;
+        padding:32px 18px;
 
-        background:rgba(35,28,23,.12);
-
-        backdrop-filter:blur(1.5px);
     }
+
 
     .table-small{
+
         font-size:12px;
 
-        letter-spacing:4px;
+        letter-spacing:3px;
+
     }
+
 
     .table-title{
-        font-size:58px;
 
-        margin-bottom:20px;
+        font-size:55px;
+
     }
 
+
     .table-text{
+
         font-size:18px;
 
-        line-height:1.65;
     }
 
-
-    /* FINAL */
 
     .final{
-        min-height:75svh;
 
         padding:80px 18px;
+
     }
+
 
     .final-title{
-        font-size:65px;
+
+        font-size:63px;
+
     }
+
 
     .final-text{
+
         font-size:19px;
-    }
 
-    .studio-name{
-        font-size:13px;
-
-        letter-spacing:2px;
-    }
-
-    .studio-tagline{
-        font-size:15px;
     }
 
 }
 
 
 /* =========================================================
-   SMALL IPHONE
-========================================================= */
-
-@media(max-width:430px){
-
-    .hero-image{
-        object-position:center center;
-    }
-
-    .table-image{
-        object-position:center center;
-    }
-
-    .table-content{
-        padding:30px 17px;
-    }
-
-    .table-title{
-        font-size:53px;
-    }
-
-    .table-text{
-        font-size:17px;
-    }
-
-}
-
-
-/* =========================================================
-   VERY SMALL PHONES
+   SMALL PHONES
 ========================================================= */
 
 @media(max-width:380px){
 
-    .names{
-        font-size:61px;
+    .inside-card{
+
+        width:70vw;
+
+        height:50vh;
+
     }
+
+
+    .inside-names{
+
+        font-size:45px;
+
+    }
+
+
+    .wax-button{
+
+        width:92px;
+
+        height:92px;
+
+    }
+
+
+    .wax-initials{
+
+        font-size:33px;
+
+    }
+
+
+    .names{
+
+        font-size:59px;
+
+    }
+
 
     .bismillah{
-        font-size:23px;
+
+        font-size:22px;
+
     }
 
-    .wax-seal{
-        width:100px;
-        height:100px;
-    }
-
-    .wax-mn{
-        font-size:35px;
-    }
 
     .details-title{
+
         font-size:49px;
+
     }
+
 
     .table-title{
+
         font-size:48px;
-    }
 
-    .table-text{
-        font-size:16px;
-    }
-
-}
-
-
-/* =========================================================
-   REDUCED MOTION
-========================================================= */
-
-@media(prefers-reduced-motion:reduce){
-
-    *,
-    *::before,
-    *::after{
-        animation-duration:.01ms !important;
-        animation-iteration-count:1 !important;
-        scroll-behavior:auto !important;
-        transition-duration:.01ms !important;
     }
 
 }
@@ -1341,50 +1678,103 @@ a{
 
 
 <!-- =====================================================
-     OPENING
+     ENVELOPE
 ===================================================== -->
 
 <section
-    class="opening"
-    id="opening"
+    class="envelope-screen"
+    id="envelopeScreen"
 >
 
-    <div class="opening-frame"></div>
 
-    <div class="opening-content">
+    <div class="envelope-border"></div>
 
-        <div class="opening-initials">
-            M & M
-        </div>
 
-        <div
-            class="wax-wrapper"
-            id="waxSeal"
-        >
+    <div
+        class="envelope"
+        id="envelope"
+    >
 
-            <div class="wax-seal">
 
-                <div class="wax-mn">
-                    M&M
+        <!-- INVITATION À L'INTÉRIEUR -->
+
+        <div class="inside-card">
+
+            <div class="inside-content">
+
+                <div class="inside-small">
+                    Notre mariage
                 </div>
 
-                <div class="wax-line"></div>
 
-                <div class="wax-text">
-                    Wedding
+                <div class="inside-names">
+
+                    Mehdi
+
+                    <div class="inside-and">
+                        &
+                    </div>
+
+                    Mouna
+
+                </div>
+
+
+                <div class="inside-date">
+                    04 · 09 · 2026
                 </div>
 
             </div>
 
         </div>
 
-        <div class="open-text">
-            Appuyez pour ouvrir
+
+        <!-- 4 FLAPS -->
+
+        <div class="flap flap-top"></div>
+
+        <div class="flap flap-bottom"></div>
+
+        <div class="flap flap-left"></div>
+
+        <div class="flap flap-right"></div>
+
+
+        <!-- WAX SEAL -->
+
+        <button
+            class="wax-button"
+            id="waxButton"
+            aria-label="Ouvrir l'invitation"
+        >
+
+            <div class="wax-initials">
+                M&M
+            </div>
+
+            <div class="wax-line"></div>
+
+            <div class="wax-word">
+                Wedding
+            </div>
+
+        </button>
+
+
+        <!-- MESSAGE -->
+
+        <div class="open-message">
+
+            <div class="open-title">
+                Appuyez sur le sceau
+            </div>
+
+            <div class="open-subtitle">
+                pour ouvrir votre invitation
+            </div>
+
         </div>
 
-        <div class="open-subtext">
-            Une invitation pour un moment précieux
-        </div>
 
     </div>
 
@@ -1408,47 +1798,65 @@ a{
 
 <section class="hero">
 
+
     <img
         class="hero-image"
         src="palace-1.jpg"
         alt="Palace de mariage"
     >
 
+
     <div class="hero-content">
+
 
         <div class="eyebrow">
             Notre mariage
         </div>
 
+
         <div class="bismillah">
             بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
         </div>
 
+
         <div class="names">
+
             Mehdi
-            <span class="and">&</span>
+
+            <span class="and">
+                &
+            </span>
+
             Mouna
+
         </div>
+
 
         <div class="hero-mn">
             M & M
         </div>
 
-        <div class="hero-separator"></div>
+
+        <div class="hero-line"></div>
+
 
         <div class="date">
             Vendredi 04 septembre 2026
         </div>
 
+
         <div class="location-small">
             Palace Seddouki · Khaima
         </div>
+
 
         <div class="location-small">
             Début du mariage · 20H
         </div>
 
+
     </div>
+
 
     <div class="scroll-down">
 
@@ -1457,6 +1865,7 @@ a{
         <div class="scroll-line"></div>
 
     </div>
+
 
 </section>
 
@@ -1468,17 +1877,22 @@ a{
 
 <section class="details">
 
+
     <div class="details-container">
+
 
         <div class="details-intro">
             Avec la grâce de Dieu
         </div>
 
+
         <div class="details-title">
             Nous vous invitons
         </div>
 
+
         <div class="details-line"></div>
+
 
         <div class="info-grid">
 
@@ -1513,7 +1927,9 @@ a{
                 <div class="info-value">
 
                     Vendredi
+
                     <br>
+
                     04 septembre 2026
 
                 </div>
@@ -1534,7 +1950,9 @@ a{
                 <div class="info-value">
 
                     Début du mariage
+
                     <br>
+
                     20H
 
                 </div>
@@ -1545,30 +1963,29 @@ a{
         </div>
 
 
-        <div class="location-section">
-
-            <div class="location-title">
-                Le lieu
-            </div>
-
-            <div class="location-address">
-                Palace Seddouki · Khaima
-            </div>
-
-            <a
-                class="map-button"
-                href="https://maps.app.goo.gl/yp5n5okoFvBzHMF29?g_st=ic"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-
-                <span>⌖</span>
-
-                Voir la localisation
-
-            </a>
-
+        <div class="location-title">
+            Le lieu
         </div>
+
+
+        <div class="location-address">
+            Palace Seddouki · Khaima
+        </div>
+
+
+        <a
+            class="map-button"
+            href="https://maps.app.goo.gl/yp5n5okoFvBzHMF29?g_st=ic"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+
+            <span>⌖</span>
+
+            Voir la localisation
+
+        </a>
+
 
     </div>
 
@@ -1582,34 +1999,42 @@ a{
 
 <section class="table-section">
 
+
     <img
         class="table-image"
         src="table-2.jpg"
-        alt="Décoration élégante de mariage"
+        alt="Décoration de mariage"
     >
 
+
     <div class="table-content">
+
 
         <div class="table-small">
             Une soirée élégante
         </div>
 
+
         <div class="table-title">
             Un moment précieux
         </div>
 
+
         <div class="table-decoration"></div>
+
 
         <div class="table-text">
 
-            Nous avons le plaisir de vous inviter 
-           à partager avec nous cette journée d’exception,
-           et à célébrer ensemble l’amour,
-           la joie et le début d’une belle histoire.
+            Nous avons le plaisir de vous inviter
+            à partager avec nous cette journée d’exception,
+            et à célébrer ensemble l’amour,
+            la joie et le début d’une belle histoire.
 
         </div>
 
+
     </div>
+
 
 </section>
 
@@ -1621,15 +2046,19 @@ a{
 
 <section class="final">
 
+
     <div class="final-content">
+
 
         <div class="final-mn">
             M & M
         </div>
 
+
         <div class="final-title">
             Mehdi & Mouna
         </div>
+
 
         <div class="final-text">
 
@@ -1641,32 +2070,35 @@ a{
 
         </div>
 
+
         <div class="final-date">
             04 · 09 · 2026
         </div>
 
 
-        <!-- =================================================
-             WEDDING INVITATION STUDIO
-        ================================================= -->
+        <!-- STUDIO -->
 
         <div class="studio-footer">
 
+
             <div class="studio-line"></div>
+
 
             <div class="studio-name">
                 Wedding Invitation Studio
             </div>
 
+
             <div class="studio-tagline">
                 Des invitations digitales pensées pour vos moments précieux
             </div>
 
+
             <a
+                class="instagram-link"
                 href="https://www.instagram.com/wedding_invitation_studio_/"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="instagram-link"
             >
 
                 <span>
@@ -1677,9 +2109,12 @@ a{
 
             </a>
 
+
         </div>
 
+
     </div>
+
 
 </section>
 
@@ -1694,38 +2129,71 @@ a{
 
 <script>
 
-const waxSeal = document.getElementById("waxSeal");
+const envelope =
+    document.getElementById("envelope");
 
-const opening = document.getElementById("opening");
+const waxButton =
+    document.getElementById("waxButton");
 
-const main = document.getElementById("main");
+const envelopeScreen =
+    document.getElementById("envelopeScreen");
+
+const main =
+    document.getElementById("main");
 
 
-function openInvitation(){
+let opened = false;
 
-    main.classList.add("visible");
 
-    opening.classList.add("hidden");
+waxButton.addEventListener("click", function(event){
+
+    event.stopPropagation();
+
+
+    if(opened){
+        return;
+    }
+
+
+    opened = true;
+
+
+    /* 1 — ouverture des 4 parties */
+
+    envelope.classList.add("opened");
+
+
+    /* 2 — apparition du site */
 
     setTimeout(function(){
 
-        window.scrollTo({
-            top:0,
-            behavior:"smooth"
-        });
+        main.classList.add("visible");
 
-    },300);
-
-}
+    },900);
 
 
-waxSeal.addEventListener(
-    "click",
-    openInvitation
-);
+    /* 3 — disparition de l'enveloppe */
+
+    setTimeout(function(){
+
+        envelopeScreen.classList.add("hide");
+
+        document.body.style.overflow = "auto";
+
+        window.scrollTo(0,0);
+
+    },1900);
+
+});
+
+
+/* Empêcher le scroll pendant l'ouverture */
+
+document.body.style.overflow = "hidden";
 
 </script>
 
 
 </body>
+
 </html>
